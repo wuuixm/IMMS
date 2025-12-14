@@ -1,22 +1,23 @@
 <template>
   <div>
-    <h2>药品管理</h2>
+    <h2 class="title-main">药品管理</h2>
 
     <!-- 分类管理部分 -->
-    <div style="margin-bottom: 30px; border: 1px solid #ccc; padding: 15px;">
-      <h3>药品分类管理</h3>
+    <div class="card-box mb-8">
+      <h3 class="title-section">药品分类</h3>
       
       <!-- 新增分类 -->
-      <div style="margin-bottom: 15px;">
-        <input v-model="newCategoryName" placeholder="输入分类名称" />
-        <button @click="addNewCategory">新增分类</button>
+      <div class="flex gap-3 mb-6">
+        <input v-model="newCategoryName" placeholder="输入分类名称" class="input-primary flex-1" />
+        <button @click="addNewCategory" class="btn-primary">新增分类</button>
       </div>
 
       <!-- 分类列表 -->
-      <div style="margin-bottom: 15px;">
+      <div class="flex flex-wrap gap-2">
         <button 
           @click="selectedCategoryId = null"
-          :style="{ backgroundColor: selectedCategoryId === null ? '#007bff' : '#6c757d', color: '#fff' }"
+          :class="selectedCategoryId === null ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+          class="px-5 py-2 rounded-full font-semibold hover:shadow-md transition-all"
         >
           全部药品
         </button>
@@ -24,79 +25,65 @@
           v-for="cat in categories"
           :key="cat.id"
           @click="selectedCategoryId = cat.id"
-          :style="{ 
-            backgroundColor: selectedCategoryId === cat.id ? '#007bff' : '#6c757d',
-            color: '#fff',
-            marginLeft: '5px'
-          }"
+          :class="selectedCategoryId === cat.id ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+          class="px-5 py-2 rounded-full font-semibold hover:shadow-md transition-all flex items-center gap-2"
         >
           {{ cat.name }}
-          <span @click.stop="handleDeleteCategory(cat.id)" style="margin-left: 5px; cursor: pointer;">✕</span>
+          <span @click.stop="handleDeleteCategory(cat.id)" class="cursor-pointer hover:font-bold ml-1">✕</span>
         </button>
       </div>
     </div>
 
     <!-- 药品管理部分 -->
-    <div style="border: 1px solid #ccc; padding: 15px;">
-      <h3>药品列表</h3>
+    <div class="card-box">
+      <h3 class="title-section">药品列表</h3>
       
       <!-- 新增药品 -->
-      <div style="margin-bottom: 20px; background: #f5f5f5; padding: 15px;">
-        <h4>新增药品</h4>
-        <div>
-          <label>
-            药品名称: <input v-model="newDrug.name" placeholder="名称" />
-          </label>
-          <label style="margin-left: 10px;">
-            库存: <input v-model.number="newDrug.stock" type="number" placeholder="数量" />
-          </label>
-          <label style="margin-left: 10px;">
-            分类:
-            <select v-model.number="newDrug.categoryId">
-              <option value="">请选择分类</option>
-              <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                {{ cat.name }}
-              </option>
-            </select>
-          </label>
-          <button @click="addNewDrug" style="margin-left: 10px;">新增</button>
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-5 border border-gray-200">
+        <h4 class="font-semibold mb-4 text-gray-900">新增药品</h4>
+        <div class="grid grid-cols-4 gap-3">
+          <input v-model="newDrug.name" placeholder="药品名称" class="input-primary" />
+          <input v-model.number="newDrug.stock" type="number" placeholder="库存数量" class="input-primary" />
+          <select v-model.number="newDrug.categoryId" class="input-primary bg-white">
+            <option value="">请选择分类</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+          </select>
+          <button @click="addNewDrug" class="btn-primary">新增</button>
         </div>
       </div>
 
       <!-- 药品列表 -->
-      <table style="width: 100%; border-collapse: collapse;">
+      <table class="table-primary">
         <thead>
-          <tr style="background: #f5f5f5;">
-            <th style="border: 1px solid #ddd; padding: 8px;">ID</th>
-            <th style="border: 1px solid #ddd; padding: 8px;">药品名称</th>
-            <th style="border: 1px solid #ddd; padding: 8px;">分类</th>
-            <th style="border: 1px solid #ddd; padding: 8px;">库存</th>
-            <th style="border: 1px solid #ddd; padding: 8px;">操作</th>
+          <tr>
+            <th>ID</th>
+            <th>药品名称</th>
+            <th>分类</th>
+            <th>库存</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="drug in displayedDrugs" :key="drug.id" style="border: 1px solid #ddd;">
-            <td style="border: 1px solid #ddd; padding: 8px;">{{ drug.id }}</td>
-            <td style="border: 1px solid #ddd; padding: 8px;">{{ drug.name }}</td>
-            <td style="border: 1px solid #ddd; padding: 8px;">{{ getCategoryName(drug.categoryId) }}</td>
-            <td style="border: 1px solid #ddd; padding: 8px;">
+          <tr v-for="drug in displayedDrugs" :key="drug.id">
+            <td class="font-mono text-sm">{{ drug.id }}</td>
+            <td class="font-medium">{{ drug.name }}</td>
+            <td>{{ getCategoryName(drug.categoryId) }}</td>
+            <td>
               <input 
                 v-model.number="editingStock[drug.id]" 
                 type="number" 
                 @change="updateStock(drug.id)"
-                style="width: 60px;"
+                class="w-20 border border-gray-300 rounded px-2 py-1 text-center"
               />
             </td>
-            <td style="border: 1px solid #ddd; padding: 8px;">
-              <button @click="handleDeleteDrug(drug.id)" style="color: red;">删除</button>
+            <td>
+              <button @click="handleDeleteDrug(drug.id)" class="btn-danger">删除</button>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <p v-if="displayedDrugs.length === 0" style="margin-top: 20px; color: #666;">
-        暂无药品数据
-      </p>
+      <p v-if="displayedDrugs.length === 0" class="mt-8 text-center text-gray-500 text-lg">暂无药品数据</p>
     </div>
   </div>
 </template>

@@ -1,48 +1,56 @@
 <template>
   <div>
-    <h2>用药提醒</h2>
+    <h2 class="title-main">用药提醒</h2>
 
     <!-- 新增提醒 -->
-    <div style="margin-bottom:16px; border:1px solid #ccc; padding:12px;">
-      <h3>创建提醒</h3>
-      <label>
-        药品：
-        <select v-model.number="form.drugId">
+    <div class="card-box mb-8">
+      <h3 class="title-section">创建提醒</h3>
+      <div class="flex gap-3">
+        <select v-model.number="form.drugId" class="input-primary flex-1 bg-white">
           <option value="">请选择药品</option>
           <option v-for="d in drugs" :key="d.id" :value="d.id">{{ d.name }}</option>
         </select>
-      </label>
-      <label style="margin-left:10px;">
-        时间：
-        <input v-model="form.remindTime" type="datetime-local" />
-      </label>
-      <button @click="createReminder" style="margin-left:10px;">创建</button>
+        <input v-model="form.remindTime" type="datetime-local" class="input-primary flex-1" />
+        <button @click="createReminder" class="btn-primary">创建</button>
+      </div>
     </div>
 
     <!-- 提醒列表 -->
-    <table style="width:100%; border-collapse:collapse;">
-      <thead>
-        <tr style="background:#f5f5f5;">
-          <th style="border:1px solid #ddd; padding:8px;">药品</th>
-          <th style="border:1px solid #ddd; padding:8px;">时间</th>
-          <th style="border:1px solid #ddd; padding:8px;">状态</th>
-          <th style="border:1px solid #ddd; padding:8px;">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="r in reminders" :key="r.id">
-          <td style="border:1px solid #ddd; padding:8px;">{{ getDrugName(r.drugId) }}</td>
-          <td style="border:1px solid #ddd; padding:8px;">{{ r.remindTime }}</td>
-          <td style="border:1px solid #ddd; padding:8px;">{{ r.status }}</td>
-          <td style="border:1px solid #ddd; padding:8px;">
-            <button @click="markDone(r.id)" :disabled="r.status === 'DONE'">完成</button>
-            <button @click="remove(r.id)" style="margin-left:8px; color:red;">删除</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card-box">
+      <table class="table-primary">
+        <thead>
+          <tr>
+            <th>药品</th>
+            <th>提醒时间</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="r in reminders" :key="r.id">
+            <td class="font-medium">{{ getDrugName(r.drugId) }}</td>
+            <td class="text-sm">{{ r.remindTime }}</td>
+            <td>
+              <span :class="r.status === 'DONE' ? 'badge-done' : 'badge-pending'">
+                {{ r.status === 'DONE' ? '✓ 已完成' : '◯ 待处理' }}
+              </span>
+            </td>
+            <td class="space-x-2">
+              <button 
+                @click="markDone(r.id)" 
+                :disabled="r.status === 'DONE'"
+                :class="r.status === 'DONE' ? 'opacity-50 cursor-not-allowed' : 'btn-success'"
+              >
+                完成
+              </button>
+              <button @click="remove(r.id)" class="btn-danger">删除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <p v-if="reminders.length === 0" style="margin-top:10px; color:#666;">暂无提醒</p>
+      <p v-if="reminders.length === 0" class="mt-8 text-center text-gray-500 text-lg">暂无提醒</p>
+    </div>
   </div>
 </template>
 

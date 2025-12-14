@@ -1,79 +1,200 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@layer components {
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  /* 通用卡片样式 */
+  .card-box {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    padding: 1.5rem;
+    border: 1px solid rgb(243 244 246);
   }
-  a:hover {
-    color: #747bff;
+
+  /* 表格样式优化 */
+  .table-primary {
+    width: 100%;
+    border-collapse: collapse;
   }
-  button {
-    background-color: #f9f9f9;
+
+  .table-primary thead tr {
+    background: linear-gradient(to right, rgb(240 249 255), rgb(224 242 254));
+  }
+
+  .table-primary thead th {
+    border: 1px solid rgb(229 231 235);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: rgb(55 65 81);
+  }
+
+  .table-primary tbody tr {
+    transition-property: background-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  .table-primary tbody tr:hover {
+    background-color: rgb(240 249 255);
+  }
+
+  .table-primary tbody tr:nth-child(even) {
+    background-color: rgb(249 250 251);
+  }
+
+  .table-primary tbody td {
+    border: 1px solid rgb(229 231 235);
+    padding: 0.75rem 1rem;
+    color: rgb(75 85 99);
+  }
+
+  /* 输入框统一样式 */
+  .input-primary {
+    width: 100%;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.5rem;
+    padding: 0.625rem 1rem;
+    color: rgb(55 65 81);
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  .input-primary::placeholder {
+    color: rgb(156 163 175);
+  }
+
+  .input-primary:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1), 0 0 0 5px rgb(59 130 246 / 0.5);
+  }
+
+  /* 按钮统一样式 */
+  .btn-primary {
+    background-color: rgb(37 99 235);
+    color: white;
+    font-weight: 600;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0.5rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(29 78 216);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-success {
+    background-color: rgb(22 163 74);
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-success:hover {
+    background-color: rgb(16 185 129);
+  }
+
+  .btn-danger {
+    color: rgb(220 38 38);
+    font-weight: 600;
+    transition-property: color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-danger:hover {
+    color: rgb(153 27 27);
+  }
+
+  .btn-secondary {
+    background-color: rgb(107 114 128);
+    color: white;
+    font-weight: 600;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0.5rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    background-color: rgb(75 85 99);
+  }
+
+  /* 标题样式 */
+  .title-main {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: rgb(17 24 39);
+    border-bottom: 4px solid rgb(37 99 235);
+    padding-bottom: 1rem;
+  }
+
+  .title-section {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: rgb(17 24 39);
+  }
+
+  /* 状态徽章 */
+  .badge-done {
+    background-color: rgb(220 252 231);
+    color: rgb(22 163 74);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .badge-pending {
+    background-color: rgb(254 243 192);
+    color: rgb(161 98 7);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* 信息框 */
+  .info-box {
+    background-color: rgb(240 249 255);
+    border-left: 4px solid rgb(59 130 246);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+  }
+
+  .success-box {
+    background-color: rgb(240 253 250);
+    border-left: 4px solid rgb(16 185 129);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: rgb(5 150 105);
   }
 }

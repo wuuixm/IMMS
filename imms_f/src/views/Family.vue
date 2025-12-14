@@ -1,47 +1,45 @@
 <template>
   <div>
-    <h2>家庭成员管理</h2>
+    <h2 class="title-main">家庭成员管理</h2>
 
     <!-- 新增成员 -->
-    <div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 12px;">
-      <h3>新增成员</h3>
-      <label>
-        选择用户：
-        <select v-model.number="form.memberUserId">
-          <option value="">请选择</option>
+    <div class="card-box mb-8">
+      <h3 class="title-section">添加成员</h3>
+      <div class="flex gap-3">
+        <select v-model.number="form.memberUserId" class="input-primary flex-1 bg-white">
+          <option value="">请选择用户</option>
           <option v-for="u in allUsers" :key="u.id" :value="u.id">
             {{ u.username }} (年龄: {{ u.age || '-' }}, 性别: {{ u.gender || '-' }})
           </option>
         </select>
-      </label>
-      <button @click="addMember" style="margin-left:10px;">新增</button>
+        <button @click="addMember" class="btn-primary">新增</button>
+      </div>
     </div>
 
     <!-- 成员列表 -->
-    <table style="width:100%; border-collapse:collapse;">
-      <thead>
-        <tr style="background:#f5f5f5;">
-          <th style="border:1px solid #ddd; padding:8px;">用户名</th>
-          <th style="border:1px solid #ddd; padding:8px;">年龄</th>
-          <th style="border:1px solid #ddd; padding:8px;">性别</th>
-          <th style="border:1px solid #ddd; padding:8px;">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="m in list" :key="m.id">
-          <td style="border:1px solid #ddd; padding:8px;">{{ getMemberUsername(m.memberUserId) }}</td>
-          <td style="border:1px solid #ddd; padding:8px;">{{ getMemberAge(m.memberUserId) }}</td>
-          <td style="border:1px solid #ddd; padding:8px;">{{ getMemberGender(m.memberUserId) }}</td>
-          <td style="border:1px solid #ddd; padding:8px;">
-            <button @click="removeMember(m.id)" style="color:red;">删除</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p v-if="list.length === 0" style="margin-top:20px; color:#666;">
-      暂无家庭成员
-    </p>
+    <div class="card-box">
+      <table class="table-primary">
+        <thead>
+          <tr>
+            <th>用户名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="m in list" :key="m.id">
+            <td class="font-medium">{{ getMemberUsername(m.memberUserId) }}</td>
+            <td>{{ getMemberAge(m.memberUserId) }}</td>
+            <td>{{ getMemberGender(m.memberUserId) }}</td>
+            <td>
+              <button @click="removeMember(m.id)" class="btn-danger">删除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p v-if="list.length === 0" class="mt-8 text-center text-gray-500">暂无家庭成员</p>
+    </div>
   </div>
 </template>
 
