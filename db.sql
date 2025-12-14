@@ -12,7 +12,7 @@
  Target Server Version : 180000 (180000)
  File Encoding         : 65001
 
- Date: 14/12/2025 16:51:06
+ Date: 14/12/2025 23:00:46
 */
 
 
@@ -85,11 +85,6 @@ CREATE TABLE "public"."drug" (
 ;
 
 -- ----------------------------
--- Records of drug
--- ----------------------------
-INSERT INTO "public"."drug" VALUES (1, '阿司匹林', 2, NULL, 100);
-
--- ----------------------------
 -- Table structure for drug_category
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."drug_category";
@@ -100,28 +95,15 @@ CREATE TABLE "public"."drug_category" (
 ;
 
 -- ----------------------------
--- Records of drug_category
--- ----------------------------
-INSERT INTO "public"."drug_category" VALUES (1, '感冒药');
-INSERT INTO "public"."drug_category" VALUES (2, '消炎药');
-INSERT INTO "public"."drug_category" VALUES (3, '心血管类');
-
--- ----------------------------
 -- Table structure for family_member
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."family_member";
 CREATE TABLE "public"."family_member" (
   "id" int8 NOT NULL DEFAULT nextval('family_member_id_seq'::regclass),
   "user_id" int8 NOT NULL,
-  "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
-  "age" int4,
-  "gender" varchar(10) COLLATE "pg_catalog"."default"
+  "member_user_id" int8 NOT NULL
 )
 ;
-
--- ----------------------------
--- Records of family_member
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for health_record
@@ -139,10 +121,6 @@ CREATE TABLE "public"."health_record" (
 ;
 
 -- ----------------------------
--- Records of health_record
--- ----------------------------
-
--- ----------------------------
 -- Table structure for reminder
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."reminder";
@@ -156,10 +134,6 @@ CREATE TABLE "public"."reminder" (
 ;
 
 -- ----------------------------
--- Records of reminder
--- ----------------------------
-
--- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_user";
@@ -168,14 +142,11 @@ CREATE TABLE "public"."sys_user" (
   "username" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
   "password" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "role" varchar(20) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6) DEFAULT CURRENT_TIMESTAMP
+  "create_time" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+  "age" int4,
+  "gender" varchar(10) COLLATE "pg_catalog"."default"
 )
 ;
-
--- ----------------------------
--- Records of sys_user
--- ----------------------------
-INSERT INTO "public"."sys_user" VALUES (2, 'admin', '123456', NULL, '2025-12-14 15:33:22.457696');
 
 -- ----------------------------
 -- Alter sequences owned by
@@ -196,7 +167,7 @@ SELECT setval('"public"."drug_id_seq"', 1, true);
 -- ----------------------------
 ALTER SEQUENCE "public"."family_member_id_seq"
 OWNED BY "public"."family_member"."id";
-SELECT setval('"public"."family_member_id_seq"', 1, false);
+SELECT setval('"public"."family_member_id_seq"', 2, true);
 
 -- ----------------------------
 -- Alter sequences owned by
@@ -210,7 +181,7 @@ SELECT setval('"public"."reminder_id_seq"', 1, false);
 -- ----------------------------
 ALTER SEQUENCE "public"."sys_user_id_seq"
 OWNED BY "public"."sys_user"."id";
-SELECT setval('"public"."sys_user_id_seq"', 2, true);
+SELECT setval('"public"."sys_user_id_seq"', 5, true);
 
 -- ----------------------------
 -- Indexes structure for table drug
@@ -235,13 +206,6 @@ CREATE INDEX "UX_category_name" ON "public"."drug_category" USING btree (
 -- Primary Key structure for table drug_category
 -- ----------------------------
 ALTER TABLE "public"."drug_category" ADD CONSTRAINT "drug_category_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table family_member
--- ----------------------------
-CREATE INDEX "UX_family_name" ON "public"."family_member" USING btree (
-  "name" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
 
 -- ----------------------------
 -- Primary Key structure for table family_member
