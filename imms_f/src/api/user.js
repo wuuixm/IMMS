@@ -6,8 +6,13 @@ export function login(username, password) {
     })
 }
 
-export function register(username, password) {
+export function register(username, password, age, gender) {
     return request.post('/user/register', null, {
-        params: { username, password }
+        params: { username, password, age, gender }
     })
 }
+
+export function getAllUsers() {
+    return request.get('/user/all')
+}
+

@@ -8,9 +8,17 @@
         查看对象：
         <select v-model.number="targetUserId" @change="reloadHealth">
           <option :value="auth.userId">本人</option>
-          <option v-for="m in members" :key="m.id" :value="m.userId">{{ m.name }}（成员）</option>
+          <option v-for="m in members" :key="m.id" :value="m.memberUserId">{{ getMemberUsername(m.memberUserId) }}（成员）</option>
         </select>
       </label>
+    </div>
+
+    <!-- 显示当前选中用户的信息 -->
+    <div style="margin-bottom: 16px; border: 1px solid #aaa; padding: 12px; background:#f9f9f9;">
+      <h3>当前用户信息</h3>
+      <p><strong>用户名：</strong>{{ currentUserInfo.username || '未知' }}</p>
+      <p><strong>年龄：</strong>{{ currentUserInfo.age || '-' }}</p>
+      <p><strong>性别：</strong>{{ currentUserInfo.gender || '-' }}</p>
     </div>
 
     <!-- 新增健康记录 -->
@@ -78,27 +86,42 @@
       <button @click="cancelEdit" style="margin-left:6px;">取消</button>
     </div>
   </div>
-  </template>
+</template>
 
 <script setup>
 import { useAuthStore } from '../stores/auth'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { getHealth, addHealth, updateHealth, deleteHealth } from '../api/health'
 import { getFamilyMembers } from '../api/family'
+import { getAllUsers } from '../api/user'
 
 const auth = useAuthStore()
 const list = ref([])
 const members = ref([])
+const allUsers = ref([])
 const userId = auth.userId
 const targetUserId = ref(userId)
+const currentUserInfo = ref({ username: '', age: '', gender: '' })
 const form = ref({ type: '', value: '', recordDate: '' })
 const editing = ref(false)
 const editForm = ref({ id: null, type: '', value: '', recordDate: '' })
 
 onMounted(async () => {
+  await loadAllUsers()
   await reloadMembers()
   await reloadHealth()
+  await updateCurrentUserInfo()
 })
+
+// 当 targetUserId 改变时，更新当前用户信息
+watch(targetUserId, () => {
+  updateCurrentUserInfo()
+})
+
+const loadAllUsers = async () => {
+  const res = await getAllUsers()
+  allUsers.value = res.data || []
+}
 
 const reloadMembers = async () => {
   // 加载当前用户的家庭成员列表
@@ -109,6 +132,24 @@ const reloadMembers = async () => {
 const reloadHealth = async () => {
   const res = await getHealth(targetUserId.value)
   list.value = res.data || []
+}
+
+const updateCurrentUserInfo = () => {
+  const user = allUsers.value.find(u => u.id === targetUserId.value)
+  if (user) {
+    currentUserInfo.value = {
+      username: user.username,
+      age: user.age || '-',
+      gender: user.gender || '-'
+    }
+  } else {
+    currentUserInfo.value = { username: '未知', age: '-', gender: '-' }
+  }
+}
+
+const getMemberUsername = (memberUserId) => {
+  const user = allUsers.value.find(u => u.id === memberUserId)
+  return user ? user.username : '未知用户'
 }
 
 const addRecord = async () => {

@@ -18,9 +18,11 @@ public class UserController {
     @PostMapping("/register")
     public User register(
             @RequestParam String username,
-            @RequestParam String password
+            @RequestParam String password,
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) String gender
     ) {
-        return service.register(username, password);
+        return service.register(username, password, age, gender);
     }
 
     // 登录
@@ -30,5 +32,11 @@ public class UserController {
             @RequestParam String password
     ) {
         return service.login(username, password);
+    }
+
+    // 查询所有用户（用于选择家庭成员）
+    @GetMapping("/all")
+    public java.util.List<User> listAllUsers() {
+        return service.listAll();
     }
 }

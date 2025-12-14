@@ -11,14 +11,12 @@ public class FamilyMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 家庭拥有者（创建者）
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(nullable = false, length = 50)
-    private String name;
+    // 被关联的真实系统用户ID
+    @Column(name = "member_user_id")
+    private Long memberUserId;
 
-    private Integer age;
-
-    @Column(length = 10)
-    private String gender;
 }

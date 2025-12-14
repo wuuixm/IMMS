@@ -25,4 +25,9 @@ public class User {
 
     @Column(name = "create_time")
     private LocalDateTime createTime;
+
+    private Integer age;
+
+    @Column(length = 10)
+    private String gender;
 }

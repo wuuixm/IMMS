@@ -21,8 +21,24 @@ public class ReminderController {
         return service.save(reminder);
     }
 
+    @PutMapping("/{id}")
+    public Reminder update(@PathVariable Long id, @RequestBody Reminder reminder) {
+        return service.update(id, reminder);
+    }
+
+    @PutMapping("/{id}/status")
+    public Reminder updateStatus(@PathVariable Long id, @RequestParam String status) {
+        return service.updateStatus(id, status);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
+
     @GetMapping
     public List<Reminder> list(@RequestParam Long userId) {
         return service.listByUser(userId);
     }
 }
+

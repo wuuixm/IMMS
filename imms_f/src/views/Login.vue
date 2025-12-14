@@ -6,7 +6,7 @@
     <input v-model="password" type="password" placeholder="密码" />
 
     <button @click="doLogin">登录</button>
-    <button @click="doRegister">注册</button>
+    <button @click="doRegister">未登录，去注册</button>
 
     <p v-if="user">登录成功：{{ user.username }}</p>
   </div>
@@ -15,7 +15,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { login, register } from '../api/user'
+import { login } from '../api/user'
 import { useAuthStore } from '../stores/auth'
 
 const username = ref('')
@@ -34,11 +34,7 @@ const doLogin = async () => {
   }
 }
 
-const doRegister = async () => {
-  const res = await register(username.value, password.value)
-  if (res && res.data) {
-    // 注册后跳转回登录页
-    router.push('/login')
-  }
+const doRegister = () => {
+  router.push('/register')
 }
 </script>

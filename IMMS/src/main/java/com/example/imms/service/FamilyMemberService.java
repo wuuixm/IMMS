@@ -27,9 +27,7 @@ public class FamilyMemberService {
         FamilyMember existing = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("家庭成员不存在"));
 
-        existing.setName(payload.getName());
-        existing.setAge(payload.getAge());
-        existing.setGender(payload.getGender());
+        existing.setMemberUserId(payload.getMemberUserId());
         existing.setUserId(payload.getUserId());
         return repo.save(existing);
     }

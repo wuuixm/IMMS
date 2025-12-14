@@ -16,7 +16,7 @@ public class UserService {
     }
 
     // 注册
-    public User register(String username, String password) {
+    public User register(String username, String password, Integer age, String gender) {
         if (repository.existsByUsername(username)) {
             throw new RuntimeException("用户名已存在");
         }
@@ -24,6 +24,8 @@ public class UserService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password); // 作业阶段：不加密
+        user.setAge(age);
+        user.setGender(gender);
         user.setRole("USER");
         user.setCreateTime(LocalDateTime.now());
 
@@ -40,5 +42,10 @@ public class UserService {
         }
 
         return user; // 简化：直接返回用户
+    }
+
+    // 查询所有用户
+    public java.util.List<User> listAll() {
+        return repository.findAll();
     }
 }
