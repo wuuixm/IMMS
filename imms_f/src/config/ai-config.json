@@ -1,0 +1,7 @@
+{
+    "endpoint": "/spark/v1/chat/completions",
+    "apiKey": "liuwpFrnlPJkrUgCuJZs:qmVUbGUonxeZEtapEFWu",
+    "model": "lite",
+    "temperature": 0.4,
+    "maxTokens": 800
+}

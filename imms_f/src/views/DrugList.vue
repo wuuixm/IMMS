@@ -66,7 +66,11 @@
         <tbody>
           <tr v-for="drug in displayedDrugs" :key="drug.id">
             <td class="font-mono text-sm">{{ drug.id }}</td>
-            <td class="font-medium">{{ drug.name }}</td>
+            <td class="font-medium">
+              <button class="text-blue-600 hover:underline" @click="showDrugAI(drug)">
+                {{ drug.name }}
+              </button>
+            </td>
             <td>{{ getCategoryName(drug.categoryId) }}</td>
             <td>
               <input 
@@ -84,12 +88,25 @@
       </table>
 
       <p v-if="displayedDrugs.length === 0" class="mt-8 text-center text-gray-500 text-lg">暂无药品数据</p>
+
+      <!-- AI 药品说明面板 -->
+      <div v-if="selectedDrugForAI" class="mt-6 p-4 border rounded bg-white shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="font-semibold">AI 药品说明：{{ selectedDrugForAI.name }}</h4>
+          <button class="text-gray-500 hover:text-gray-700" @click="selectedDrugForAI=null">关闭</button>
+        </div>
+        <div class="text-sm leading-6 whitespace-pre-wrap">
+          <span v-if="aiLoading">正在获取，请稍候…</span>
+          <span v-else>{{ aiAnswer }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { getDrugAIInfo } from '../api/ai-qa-helper'
 import { 
   getDrugs, 
   getDrugsByCategory, 
@@ -108,6 +125,11 @@ const selectedCategoryId = ref(null)
 const newDrug = ref({ name: '', stock: 0, categoryId: '' })
 const newCategoryName = ref('')
 const editingStock = ref({})
+
+// AI 展示状态
+const selectedDrugForAI = ref(null)
+const aiAnswer = ref('')
+const aiLoading = ref(false)
 
 // 计算属性：根据选中的分类筛选药品
 const displayedDrugs = computed(() => {
@@ -229,5 +251,18 @@ const getCategoryName = (categoryId) => {
   if (!categoryId) return '未分类'
   const cat = categories.value.find(c => c.id === categoryId)
   return cat ? cat.name : '未分类'
+}
+
+// 点击药品名称，获取 AI 说明
+const showDrugAI = async (drug) => {
+  selectedDrugForAI.value = drug
+  aiAnswer.value = ''
+  aiLoading.value = true
+  const answer = await getDrugAIInfo({
+    name: drug?.name,
+    category: getCategoryName(drug?.categoryId)
+  })
+  aiAnswer.value = answer
+  aiLoading.value = false
 }
 </script>
